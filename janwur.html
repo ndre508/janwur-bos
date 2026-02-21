@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TERMINAL_ACCESS_v4.0</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;500&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Fira+Code', monospace;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        /* Matrix Background */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Login Overlay */
+        #login-screen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px #0f0;
+        }
+
+        input {
+            background: #000;
+            border: 1px solid #0f0;
+            color: #0f0;
+            padding: 10px;
+            font-family: 'Fira+Code';
+            outline: none;
+        }
+
+        button {
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button:hover { background: #050; color: #0f0; }
+
+        /* Dashboard */
+        #main-content {
+            display: none;
+            padding: 20px;
+            height: 100vh;
+        }
+
+        .panel {
+            border: 1px solid #0f0;
+            padding: 15px;
+            background: rgba(0, 20, 0, 0.8);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+        }
+
+        .console {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #0f0;
+            padding: 10px;
+            font-size: 0.8em;
+            margin-top: 10px;
+        }
+
+        .glitch { animation: glitch 1s linear infinite; }
+        @keyframes glitch {
+            2%, 64% { transform: translate(2px,0) skew(0deg); }
+            4%, 60% { transform: translate(-2px,0) skew(0deg); }
+            62% { transform: translate(0,0) skew(5deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix"></canvas>
+
+    <div id="login-screen">
+        <h1 class="glitch"> ATTACK BY JAN WURR</h1>
+        <p>WELCOME JAN WURR 🤓🤓</p>
+        <div class="input-group">
+            <input type="text" id="user" placeholder="janwur elek">
+        </div>
+        <div class="input-group">
+            <input type="password" id="pass" placeholder="janwur123">
+        </div>
+        <button onclick="checkAuth()">LOGIN WURR GC</button>
+        <p id="error" style="color: red; margin-top: 10px; display: none;">ACCESS DENIED: INVALID CREDENTIALS</p>
+    </div>
+
+    <div id="main-content">
+        <h2 class="glitch">> ROOT@SYSTEM_ACCESS_GRANTED</h2>
+        <hr border-color="#0f0">
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="panel">
+                <h3>NETWORK_STRESS_MODULE</h3>
+                <input type="text" id="target" placeholder="TARGET_IP / URL" style="width: 80%;">
+                <br><br>
+                <button onclick="simulateDDoS()">INITIATE_SEQUENCE</button>
+            </div>
+            
+            <div class="panel">
+                <h3>SYSTEM_STATUS</h3>
+                <p>CPU: 14% | RAM: 2.4GB | PROXY: ACTIVE</p>
+                <p>LOCATION: [HIDDEN]</p>
+            </div>
+        </div>
+
+        <div class="console" id="console">
+            [SYSTEM] Awaiting commands...
+        </div>
+    </div>
+
+    <script>
+        // Matrix Effect
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0f0";
+            ctx.font = fontSize + "px monospace";
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 33);
+
+        // Login Logic
+        function checkAuth() {
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
+            if (u === "janwur elek" && p === "janwur123") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+            } else {
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        // DDoS Simulation
+        function simulateDDoS() {
+            const target = document.getElementById('target').value;
+            const consoleBox = document.getElementById('console');
+            if(!target) return alert("Enter target!");
+
+            let count = 0;
+            const interval = setInterval(() => {
+                const log = document.createElement('div');
+                log.innerHTML = `[SENDING_PACKET] >> BYTES: 64KB TO: ${target} STATUS: <span style="color:white">SUCCESS</span>`;
+                consoleBox.prepend(log);
+                count++;
+                if (count > 20) {
+                    clearInterval(interval);
+                    const finish = document.createElement('div');
+                    finish.innerHTML = `<br> [SEQUENCE_FINISHED] TARGET: ${target} IS UNRESPONSIVE.`;
+                    consoleBox.prepend(finish);
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>
